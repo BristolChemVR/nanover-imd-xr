@@ -108,6 +108,57 @@ namespace NanoverImd.Interaction
         }
 
         /// <summary>
+        /// Try to find the residue belonging to the nearest interactable particle.
+        /// This query does not create a particle grab or modify an interaction.
+        /// </summary>
+        /// <param name="grabberPose">The transformation of the picking pivot.</param>
+        /// <param name="result">
+        /// Information about the picked residue when the method returns <c>true</c>.
+        /// </param>
+        /// <returns>
+        /// <c>true</c> when a particle with valid residue data was found; otherwise,
+        /// <c>false</c>.
+        /// </returns>
+        public bool TryGetNearestResidue(Transformation grabberPose,
+                                         out ResiduePickResult result)
+        {
+            result = null;
+
+            if (GetNearestParticleIndex(grabberPose) is not { } particleIndex)
+                return false;
+
+            var frame = simulation.FrameSynchronizer.CurrentFrame;
+            var particleResidues = frame?.ParticleResidues;
+            if (particleResidues == null)
+                return false;
+
+            var particleCount = Mathf.Min(frame.ParticleCount, particleResidues.Length);
+            if (particleIndex < 0 || particleIndex >= particleCount)
+                return false;
+
+            var residueIndex = particleResidues[particleIndex];
+            if (residueIndex < 0)
+                return false;
+
+            var residueParticleIndices = new List<int>();
+            for (var i = 0; i < particleCount; i++)
+            {
+                if (particleResidues[i] == residueIndex)
+                    residueParticleIndices.Add(i);
+            }
+
+            if (residueParticleIndices.Count == 0)
+                return false;
+
+            result = new ResiduePickResult(
+                particleIndex,
+                residueIndex,
+                residueParticleIndices
+            );
+            return true;
+        }
+
+        /// <summary>
         /// Attempt to grab the nearest particle, returning null if no interaction is possible.
         /// </summary>
         /// <param name="grabberPose">The transformation of the grabbing pivot.</param>
