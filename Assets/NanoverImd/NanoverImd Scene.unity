@@ -8596,6 +8596,7 @@ GameObject:
   - component: {fileID: 431384313}
   - component: {fileID: 431384315}
   - component: {fileID: 431384314}
+  - component: {fileID: 431384316}
   m_Layer: 0
   m_Name: Simulation
   m_TagString: Untagged
@@ -8652,6 +8653,18 @@ MonoBehaviour:
   rightHandedSimulationSpace: {fileID: 92531328}
   interactableScene: {fileID: 54429685}
   application: {fileID: 544060994}
+--- !u!114 &431384316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431384312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80c65dbd642348c0b015159646a7bed4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NanoverImd::NanoverImd.Selection.ResidueSelectionWorkspaceController
 --- !u!1 &441061809
 GameObject:
   m_ObjectHideFlags: 0
