@@ -8618,6 +8618,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 846736390}
+  - {fileID: 2147000101}
   - {fileID: 185265282}
   - {fileID: 1042607094}
   - {fileID: 507066173}
@@ -12844,6 +12845,73 @@ MonoBehaviour:
   anchor: 0
   priority: 0
   bothHands: 1
+--- !u!1 &2147000100
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2147000101}
+  - component: {fileID: 2147000102}
+  - component: {fileID: 2147000103}
+  m_Layer: 0
+  m_Name: Selection Mode
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2147000101
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2147000100}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 431384313}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2147000102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2147000100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 710f1504e2584f11b11bdbaaec455f24, type: 3}
+  m_Name: ''
+  m_EditorClassIdentifier: ''
+  controllers: {fileID: 2074532958}
+  broadcastCursors: 1
+  gizmo: {fileID: 3640672610816993193, guid: 1c71c146c52b75b40b044e66de75be8e, type: 3}
+  anchor: 0
+  priority: 1
+  bothHands: 1
+--- !u!114 &2147000103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2147000100}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84ce615ef5e64e9f8d3fbb83c2f97b93, type: 3}
+  m_Name: ''
+  m_EditorClassIdentifier: NanoverImd::NanoverImd.Selection.XRResidueSelectionManager
+  interactableScene: {fileID: 54429685}
+  workspaceController: {fileID: 431384316}
+  controllerManager: {fileID: 2074532958}
+  targetMode: {fileID: 2147000102}
 --- !u!1 &848849406
 GameObject:
   m_ObjectHideFlags: 0
