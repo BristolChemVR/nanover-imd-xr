@@ -175,7 +175,7 @@ namespace NanoverImd.Selection
             UnitScaleTransformation initialPose)
         {
             var selection = workspaceController.Workspace?.ActiveSelection;
-            if (selection == null)
+            if (selection == null || selection.IsReadOnly)
                 return null;
 
             return new ActiveResidueSelectionStroke(interactableScene,

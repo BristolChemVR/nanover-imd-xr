@@ -62,6 +62,7 @@ namespace NanoverImd.Selection
 
             ProteinSelection = new ResidueSelection("protein", Sequence);
             ProteinSelection.SelectAll();
+            ProteinSelection.MakeReadOnly();
             selections.Add(ProteinSelection);
             ActiveSelection = ProteinSelection;
         }

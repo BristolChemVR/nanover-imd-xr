@@ -48,6 +48,11 @@ namespace NanoverImd.Selection
         public int Count => selectedResidueIndices.Count;
 
         /// <summary>
+        /// Whether this selection rejects changes to its residue membership.
+        /// </summary>
+        public bool IsReadOnly { get; private set; }
+
+        /// <summary>
         /// Raised after the selected residue set changes.
         /// </summary>
         public event Action<ResidueSelection> Changed;
@@ -81,6 +86,8 @@ namespace NanoverImd.Selection
         /// </exception>
         public bool Toggle(int residueIndex)
         {
+            EnsureMutable();
+
             if (!Sequence.TryGetResidue(residueIndex, out _))
                 throw new ArgumentOutOfRangeException(
                     nameof(residueIndex),
@@ -108,6 +115,8 @@ namespace NanoverImd.Selection
         /// </summary>
         public void SelectAll()
         {
+            EnsureMutable();
+
             var changed = false;
             foreach (var residueIndex in Sequence.ResidueIndices)
                 changed |= selectedResidueIndices.Add(residueIndex);
@@ -121,11 +130,28 @@ namespace NanoverImd.Selection
         /// </summary>
         public void Clear()
         {
+            EnsureMutable();
+
             if (selectedResidueIndices.Count == 0)
                 return;
 
             selectedResidueIndices.Clear();
             OnChanged();
+        }
+
+        /// <summary>
+        /// Permanently prevents changes to this selection's residue membership.
+        /// </summary>
+        internal void MakeReadOnly()
+        {
+            IsReadOnly = true;
+        }
+
+        private void EnsureMutable()
+        {
+            if (IsReadOnly)
+                throw new InvalidOperationException(
+                    $"Selection '{Name}' is read-only.");
         }
 
         private void OnChanged()
