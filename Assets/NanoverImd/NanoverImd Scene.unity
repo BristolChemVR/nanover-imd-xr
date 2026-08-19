@@ -8597,6 +8597,7 @@ GameObject:
   - component: {fileID: 431384315}
   - component: {fileID: 431384314}
   - component: {fileID: 431384316}
+  - component: {fileID: 431384317}
   m_Layer: 0
   m_Name: Simulation
   m_TagString: Untagged
@@ -8666,6 +8667,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80c65dbd642348c0b015159646a7bed4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NanoverImd::NanoverImd.Selection.ResidueSelectionWorkspaceController
+--- !u!114 &431384317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431384312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6b7c34d2a1e4d0c98b95a7e2c834f61, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: NanoverImd::NanoverImd.Selection.ResidueSelectionHighlightSource
 --- !u!1 &441061809
 GameObject:
   m_ObjectHideFlags: 0
@@ -26310,6 +26323,10 @@ PrefabInstance:
       propertyPath: interactableScene
       value: 
       objectReference: {fileID: 54429685}
+    - target: {fileID: 1391474368386691779, guid: 667cc4daec5d5a44cb6c3ec450d505ab, type: 3}
+      propertyPath: residueSelectionHighlightSource
+      value:
+      objectReference: {fileID: 431384317}
     - target: {fileID: 1391474368386691779, guid: 667cc4daec5d5a44cb6c3ec450d505ab, type: 3}
       propertyPath: renderSubgraphs.Array.size
       value: 3
