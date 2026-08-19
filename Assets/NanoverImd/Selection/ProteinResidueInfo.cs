@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Nanover.Core.Science;
 
 namespace NanoverImd.Selection
@@ -40,9 +41,16 @@ namespace NanoverImd.Selection
         /// </summary>
         public char SequenceCode => StandardAminoAcid?.SingleLetterCode ?? 'X';
 
+        /// <summary>
+        /// The particle indices belonging to this residue in the current
+        /// topology.
+        /// </summary>
+        public IReadOnlyList<int> ParticleIndices { get; }
+
         public ProteinResidueInfo(int residueIndex,
                                   int entityIndex,
-                                  string residueName)
+                                  string residueName,
+                                  IReadOnlyList<int> particleIndices)
         {
             if (residueIndex < 0)
                 throw new ArgumentOutOfRangeException(nameof(residueIndex));
@@ -51,11 +59,23 @@ namespace NanoverImd.Selection
             if (string.IsNullOrWhiteSpace(residueName))
                 throw new ArgumentException("A residue name is required.",
                                             nameof(residueName));
+            if (particleIndices == null)
+                throw new ArgumentNullException(nameof(particleIndices));
+
+            foreach (var particleIndex in particleIndices)
+            {
+                if (particleIndex < 0)
+                    throw new ArgumentOutOfRangeException(
+                        nameof(particleIndices),
+                        particleIndex,
+                        "Particle indices must not be negative.");
+            }
 
             ResidueIndex = residueIndex;
             EntityIndex = entityIndex;
             ResidueName = residueName.Trim();
             StandardAminoAcid = AminoAcid.GetAminoAcidFromResidue(ResidueName);
+            ParticleIndices = new List<int>(particleIndices).AsReadOnly();
         }
     }
 }

@@ -112,6 +112,35 @@ namespace NanoverImd.Selection
         }
 
         /// <summary>
+        /// Returns the distinct particle indices belonging to the specified
+        /// residues, in ascending order.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when a residue index is not part of this protein sequence.
+        /// </exception>
+        public IReadOnlyList<int> GetParticleIndicesForResidues(
+            IEnumerable<int> residueIndices)
+        {
+            if (residueIndices == null)
+                throw new ArgumentNullException(nameof(residueIndices));
+
+            var particleIndices = new SortedSet<int>();
+            foreach (var residueIndex in residueIndices)
+            {
+                if (!residuesByIndex.TryGetValue(residueIndex,
+                                                 out var residue))
+                    throw new ArgumentOutOfRangeException(
+                        nameof(residueIndices),
+                        residueIndex,
+                        "The residue is not part of this protein sequence.");
+
+                particleIndices.UnionWith(residue.ParticleIndices);
+            }
+
+            return new ReadOnlyCollection<int>(particleIndices.ToList());
+        }
+
+        /// <summary>
         /// Returns the one-letter sequence for an entity. Non-standard residues
         /// are represented by X.
         /// </summary>

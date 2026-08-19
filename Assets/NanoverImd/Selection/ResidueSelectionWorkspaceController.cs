@@ -122,6 +122,19 @@ namespace NanoverImd.Selection
                                       secondResidue.ResidueName,
                                       StringComparison.Ordinal))
                     return false;
+
+                if (firstResidue.ParticleIndices.Count
+                    != secondResidue.ParticleIndices.Count)
+                    return false;
+
+                for (var particleIndex = 0;
+                     particleIndex < firstResidue.ParticleIndices.Count;
+                     particleIndex++)
+                {
+                    if (firstResidue.ParticleIndices[particleIndex]
+                        != secondResidue.ParticleIndices[particleIndex])
+                        return false;
+                }
             }
 
             return true;

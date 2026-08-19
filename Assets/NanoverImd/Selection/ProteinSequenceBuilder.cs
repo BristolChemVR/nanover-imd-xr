@@ -32,6 +32,9 @@ namespace NanoverImd.Selection
                 frame.ParticleResidues,
                 frame.ParticleNames,
                 residueNames.Length);
+            var particleIndicesByResidue = GetParticleIndicesByResidue(
+                frame.ParticleResidues,
+                residueNames.Length);
             var residues = new List<ProteinResidueInfo>();
 
             for (var residueIndex = 0;
@@ -50,9 +53,15 @@ namespace NanoverImd.Selection
 
                 var entityIndex = GetEntityIndex(frame.ResidueEntities,
                                                  residueIndex);
+                IReadOnlyList<int> particleIndices =
+                    particleIndicesByResidue.TryGetValue(residueIndex,
+                                                         out var indices)
+                        ? indices
+                        : Array.Empty<int>();
                 residues.Add(new ProteinResidueInfo(residueIndex,
                                                     entityIndex,
-                                                    residueName));
+                                                    residueName,
+                                                    particleIndices));
             }
 
             return new ProteinSequence(residues);
@@ -95,6 +104,39 @@ namespace NanoverImd.Selection
             }
 
             return atomNamesByResidue;
+        }
+
+        private static Dictionary<int, List<int>> GetParticleIndicesByResidue(
+            int[] particleResidues,
+            int residueCount)
+        {
+            var particleIndicesByResidue =
+                new Dictionary<int, List<int>>();
+
+            if (particleResidues == null)
+                return particleIndicesByResidue;
+
+            for (var particleIndex = 0;
+                 particleIndex < particleResidues.Length;
+                 particleIndex++)
+            {
+                var residueIndex = particleResidues[particleIndex];
+                if (residueIndex < 0 || residueIndex >= residueCount)
+                    continue;
+
+                if (!particleIndicesByResidue.TryGetValue(
+                        residueIndex,
+                        out var particleIndices))
+                {
+                    particleIndices = new List<int>();
+                    particleIndicesByResidue.Add(residueIndex,
+                                                 particleIndices);
+                }
+
+                particleIndices.Add(particleIndex);
+            }
+
+            return particleIndicesByResidue;
         }
 
         private static bool IsProteinResidue(
