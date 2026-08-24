@@ -85,6 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 8528582866378757822, guid: d2f5fbc8cb179854db29178992a5202a, type: 3}
+  - {fileID: 8528582866378757822, guid: a54a46f07b16463d8a41948ce31084cc, type: 3}
   - {fileID: 8528582866378757822, guid: 885426ce1f99d6a4fafe2934e8783c09, type: 3}
   - {fileID: 540731497701321300, guid: 34942b8d02e486e4b9f92878ed33193c, type: 3}
   frameAdaptor:

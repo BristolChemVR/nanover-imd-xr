@@ -472,6 +472,9 @@ namespace NanoverImd.Selection
             // describes a color subgraph
             FindSubgraph(ScaleKeyword, GetScaleSubgraph);
 
+            // A colored selection pulse is applied before the white hover pulse,
+            // so selected particles stay visible while retaining hover feedback.
+            subgraphs.Add(GetColorSubgraph("selection highlighter"));
             subgraphs.Add(GetColorSubgraph("color pulser"));
 
             // Get the render subgraph from the render key

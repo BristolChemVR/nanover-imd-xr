@@ -130,6 +130,7 @@ MonoBehaviour:
   - {fileID: 4265432535112186709, guid: e9d374d0e94de7b4390c8f2ba2c481c1, type: 3}
   - {fileID: 8528582866378757822, guid: 8b7387b745e1e3f43ac3f19963eccd13, type: 3}
   - {fileID: 8528582866378757822, guid: 8bfe22b433399e84cb2f2ec58dc10ad9, type: 3}
+  - {fileID: 8528582866378757822, guid: a54a46f07b16463d8a41948ce31084cc, type: 3}
   - {fileID: 8528582866378757822, guid: 885426ce1f99d6a4fafe2934e8783c09, type: 3}
   - {fileID: 540731497701321300, guid: cb533b0657b12cc499a292abf0b06a5b, type: 3}
   frameAdaptor:

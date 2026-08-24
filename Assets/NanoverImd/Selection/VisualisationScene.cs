@@ -44,8 +44,7 @@ namespace NanoverImd.Selection
             new IntArrayProperty();
 
         /// <summary>
-        /// The union of interaction, hover, and active residue-selection
-        /// particles.
+        /// The particles currently highlighted by interaction or hover.
         /// </summary>
         public IReadOnlyProperty<int[]> HighlightedParticles
             => highlightedParticles;
@@ -103,22 +102,24 @@ namespace NanoverImd.Selection
         }
 
         private const string HighlightedParticlesKey = "highlighted.particles";
+        private const string SelectedParticlesKey = "selected.particles";
 
         private void OnEnable()
         {
             InteractedParticles.ValueChanged += RefreshHighlightedParticles;
-            if (residueSelectionHighlightSource != null)
-            {
-                residueSelectionHighlightSource.SelectedParticles.ValueChanged +=
-                    RefreshHighlightedParticles;
-            }
-
             RefreshHighlightedParticles();
 
             frameAdaptor = gameObject.AddComponent<FrameAdaptor>();
             frameAdaptor.FrameSource = frameSource;
             frameAdaptor.Node.AddOverrideProperty<int[]>(HighlightedParticlesKey)
                         .LinkedProperty = HighlightedParticles;
+
+            if (residueSelectionHighlightSource != null)
+            {
+                frameAdaptor.Node.AddOverrideProperty<int[]>(SelectedParticlesKey)
+                            .LinkedProperty = residueSelectionHighlightSource
+                                .SelectedParticles;
+            }
 
             simulation.Multiplayer.SharedStateDictionaryKeyUpdated +=
                 MultiplayerOnSharedStateDictionaryKeyChanged;
@@ -136,12 +137,6 @@ namespace NanoverImd.Selection
                     RefreshHighlightedParticles;
             }
 
-            if (residueSelectionHighlightSource != null)
-            {
-                residueSelectionHighlightSource.SelectedParticles.ValueChanged -=
-                    RefreshHighlightedParticles;
-            }
-
             simulation.Multiplayer.SharedStateDictionaryKeyUpdated -=
                 MultiplayerOnSharedStateDictionaryKeyChanged;
             simulation.Multiplayer.SharedStateDictionaryKeyRemoved -=
@@ -156,11 +151,6 @@ namespace NanoverImd.Selection
 
             if (InteractedParticles.HasValue)
                 particles.UnionWith(InteractedParticles.Value);
-
-            var selectionParticles =
-                residueSelectionHighlightSource?.SelectedParticles;
-            if (selectionParticles?.HasValue == true)
-                particles.UnionWith(selectionParticles.Value);
 
             highlightedParticles.Value = particles.ToArray();
         }
