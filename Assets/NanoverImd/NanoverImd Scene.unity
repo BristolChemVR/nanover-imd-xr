@@ -1021,7 +1021,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9211849960110976817, guid: b91022607f4f30745bef4ca0e8abf5c8, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 360
+      value: 520
       objectReference: {fileID: 0}
     - target: {fileID: 9211849960110976817, guid: b91022607f4f30745bef4ca0e8abf5c8, type: 3}
       propertyPath: m_LocalScale.x
@@ -14612,6 +14612,8 @@ MonoBehaviour:
   simulation: {fileID: 431384315}
   controllerManager: {fileID: 2074532958}
   targetMode: {fileID: 846736391}
+  additionalTargetModes:
+  - {fileID: 2147000102}
 --- !u!1 &1043497138
 GameObject:
   m_ObjectHideFlags: 0
