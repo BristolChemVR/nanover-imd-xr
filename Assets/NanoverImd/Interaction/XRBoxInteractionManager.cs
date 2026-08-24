@@ -23,6 +23,10 @@ namespace NanoverImd.Interaction
 
         [SerializeField]
         private ControllerInputMode targetMode;
+
+        [SerializeField]
+        [Tooltip("Additional controller modes in which grip-based box manipulation remains available.")]
+        private ControllerInputMode[] additionalTargetModes;
 #pragma warning restore 0649
 
         private AttemptableManipulator leftManipulator;
@@ -85,9 +89,29 @@ namespace NanoverImd.Interaction
             var controllerPoser = controller.GripPose;
             manipulator = new AttemptableManipulator(controllerPoser, AttemptGrabSpace);
 
-            button = characteristics.WrapUsageAsButton(CommonUsages.gripButton, () => controllerManager.CurrentInputMode == targetMode && gameObject.activeInHierarchy);
+            button = characteristics.WrapUsageAsButton(
+                CommonUsages.gripButton,
+                () => IsCompatibleInputMode() && gameObject.activeInHierarchy);
             button.Pressed += manipulator.AttemptManipulation;
             button.Released += manipulator.EndActiveManipulation;
+        }
+
+        private bool IsCompatibleInputMode()
+        {
+            var currentMode = controllerManager.CurrentInputMode;
+            if (currentMode == targetMode)
+                return true;
+
+            if (additionalTargetModes == null)
+                return false;
+
+            foreach (var mode in additionalTargetModes)
+            {
+                if (currentMode == mode)
+                    return true;
+            }
+
+            return false;
         }
 
         private IActiveManipulation AttemptGrabSpace(UnitScaleTransformation grabberPose)
