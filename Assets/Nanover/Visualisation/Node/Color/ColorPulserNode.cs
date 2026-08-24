@@ -33,6 +33,9 @@ namespace Nanover.Visualisation.Node.Color
 
         [SerializeField]
         private float minimum = 0f;
+
+        [SerializeField]
+        private UnityEngine.Color pulseColor = UnityEngine.Color.white;
         
         public bool IsInputDirty => inputColors.IsDirty
                                  || highlightFilter.IsDirty
@@ -45,13 +48,11 @@ namespace Nanover.Visualisation.Node.Color
         {
             var white = UnityEngine.Color.white;
 
-            var isFilterNonZero = false;
-            var isOutputValid = false;
+            var isFilterNonZero = highlightFilter.HasNonEmptyValue();
+            var isOutputValid = inputColors.HasNonNullValue()
+                             || count.HasNonNullValue();
             if (IsInputDirty)
             {
-                isFilterNonZero = highlightFilter.HasNonEmptyValue();
-                isOutputValid = inputColors.HasNonNullValue() || count.HasNonNullValue();
-
                 if (inputColors.HasNonNullValue())
                 {
                     Array.Resize(ref cachedArray, inputColors.Value.Length);
@@ -102,7 +103,7 @@ namespace Nanover.Visualisation.Node.Color
                     var filter = highlightFilter.Value;
                     foreach (var i in filter)
                     {
-                        colors[i] += intensity * white;
+                        colors[i] += intensity * pulseColor;
                     }
                 }
 
