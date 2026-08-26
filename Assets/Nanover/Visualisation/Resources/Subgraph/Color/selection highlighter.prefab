@@ -146,4 +146,4 @@ MonoBehaviour:
     speed: 4
     maximum: 0.9
     minimum: 0.15
-    pulseColor: {r: 1, g: 0.15, b: 0.65, a: 1}
+    pulseColor: {r: 0.1490196, g: 1, b: 0.45544124, a: 1}
