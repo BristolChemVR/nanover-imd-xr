@@ -109,6 +109,17 @@ namespace NanoverImd.UI
         }
 
         /// <summary>
+        /// Makes the supplied workspace selection active.
+        /// </summary>
+        public void SetActiveSelection(ResidueSelection selection)
+        {
+            if (workspace == null || selection == null)
+                return;
+
+            workspace.SetActiveSelection(selection);
+        }
+
+        /// <summary>
         /// Deletes the active custom selection.
         /// </summary>
         public void DeleteActiveSelection()
