@@ -815,6 +815,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -31.310345
       objectReference: {fileID: 0}
+    - target: {fileID: 1532589625680064568, guid: b91022607f4f30745bef4ca0e8abf5c8, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3201288921952989163, guid: b91022607f4f30745bef4ca0e8abf5c8, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -9125,6 +9129,7 @@ GameObject:
   - component: {fileID: 431384316}
   - component: {fileID: 431384317}
   - component: {fileID: 431384318}
+  - component: {fileID: 431384319}
   m_Layer: 0
   m_Name: Simulation
   m_TagString: Untagged
@@ -9220,6 +9225,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: NanoverImd::NanoverImd.UI.ResidueSelectionPanelController
   workspaceController: {fileID: 431384316}
   selectionMode: {fileID: 2147000100}
+  syncController: {fileID: 431384319}
+--- !u!114 &431384319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431384312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f45de04640d34a87a887d66ba2871aa7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: NanoverImd::NanoverImd.Selection.ResidueSelectionSyncController
+  commandName: residue-selections/sync
+  timeoutSeconds: 10
 --- !u!1 &441061809
 GameObject:
   m_ObjectHideFlags: 0
