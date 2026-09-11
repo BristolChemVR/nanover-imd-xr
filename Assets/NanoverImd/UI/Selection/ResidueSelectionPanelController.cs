@@ -17,6 +17,9 @@ namespace NanoverImd.UI
         [SerializeField]
         private GameObject selectionMode;
 
+        [SerializeField]
+        private ResidueSelectionSyncController syncController;
+
         private ResidueSelectionWorkspace workspace;
         private ResidueSelection activeSelection;
 
@@ -36,6 +39,47 @@ namespace NanoverImd.UI
         public bool SelectionModeEnabled =>
             selectionMode != null && selectionMode.activeSelf;
 
+        public bool CanSyncSelections => isActiveAndEnabled
+                                         && workspace != null
+                                         && syncController != null
+                                         && syncController.CanSync;
+
+        public bool IsSendingSelections => syncController != null
+                                           && syncController.IsSending;
+
+        /// <summary>
+        /// UI success requires the server's explicit success acknowledgement
+        /// and refers only to the captured snapshot, not subsequent local edits.
+        /// </summary>
+        public string SelectionSyncStatusText
+        {
+            get
+            {
+                if (syncController == null)
+                    return "Selection sending is unavailable.";
+                if (string.IsNullOrWhiteSpace(syncController.CommandName))
+                    return "Set a server Command name to enable sending.";
+
+                switch (syncController.Status)
+                {
+                    case ResidueSelectionSyncStatus.Sending:
+                        return "Sending the current snapshot...";
+                    case ResidueSelectionSyncStatus.Succeeded:
+                        return "Snapshot synced.\nConfirmed by server.\nLater edits need a new send.";
+                    case ResidueSelectionSyncStatus.TimedOut:
+                        return "Timed out.\nServer outcome unknown.\nNo automatic retry.";
+                    case ResidueSelectionSyncStatus.Cancelled:
+                        return "Waiting cancelled.\nServer outcome unknown.";
+                    case ResidueSelectionSyncStatus.Failed:
+                        return "Send failed.\n" + syncController.LastError;
+                }
+
+                return CanSyncSelections
+                    ? "Send all selections, including protein.\nLater edits need a new send."
+                    : "Sending unavailable.\nCheck connection, workspace and timeout.";
+            }
+        }
+
         /// <summary>
         /// Raised when the workspace, active selection, or active selection
         /// contents change.
@@ -52,6 +96,8 @@ namespace NanoverImd.UI
             }
 
             workspaceController.WorkspaceChanged += OnWorkspaceChanged;
+            if (syncController != null)
+                syncController.StateChanged += OnStateChanged;
             var currentWorkspace = workspaceController.Workspace;
             if (currentWorkspace == null)
                 SetSelectionModeEnabled(false);
@@ -61,6 +107,9 @@ namespace NanoverImd.UI
 
         private void OnDisable()
         {
+            if (syncController != null)
+                syncController.StateChanged -= OnStateChanged;
+
             if (workspaceController != null)
                 workspaceController.WorkspaceChanged -= OnWorkspaceChanged;
 
@@ -141,6 +190,33 @@ namespace NanoverImd.UI
                 return;
 
             activeSelection.Clear();
+        }
+
+        /// <summary>
+        /// Button-event entry point. Handles async errors here so UI callbacks
+        /// never leave an unobserved command task. It does not retry requests.
+        /// </summary>
+        public async void SendSelections()
+        {
+            if (!CanSyncSelections)
+            {
+                OnStateChanged();
+                return;
+            }
+
+            try
+            {
+                await syncController.SyncCurrentWorkspaceAsync();
+            }
+            catch (OperationCanceledException)
+            {
+                // The sync controller exposes the cancellation state to UI.
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning("Selection command did not complete: "
+                                 + exception.Message);
+            }
         }
 
         private void BindWorkspace(

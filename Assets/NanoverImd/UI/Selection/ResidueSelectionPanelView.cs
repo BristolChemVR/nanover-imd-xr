@@ -5,6 +5,7 @@ using NanoverImd.Selection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.UI;
 
 namespace NanoverImd.UI
 {
@@ -68,6 +69,15 @@ namespace NanoverImd.UI
         [SerializeField]
         private UiButton clearButton;
 
+        [Header("Manual Server Send")]
+        [SerializeField]
+        private UiButton syncButton;
+
+        [SerializeField]
+        private TMP_Text syncStatusLabel;
+
+        private Button syncButtonControl;
+
         private readonly List<ResidueSelectionListItemView> selectionItems =
             new List<ResidueSelectionListItemView>();
 
@@ -98,6 +108,27 @@ namespace NanoverImd.UI
             createButton.OnClick += OnCreateClicked;
             deleteButton.OnClick += OnDeleteClicked;
             clearButton.OnClick += OnClearClicked;
+
+            // Optional so older panel instances keep their local selection UI.
+            if (syncButton != null)
+            {
+                syncButton.Image = null;
+                syncButtonControl = syncButton.GetComponent<Button>();
+                if (syncButtonControl != null)
+                    syncButtonControl.onClick.AddListener(OnSyncClicked);
+            }
+
+            if (syncStatusLabel != null)
+            {
+                syncStatusLabel.richText = false;
+                syncStatusLabel.overflowMode = TextOverflowModes.Ellipsis;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (syncButtonControl != null)
+                syncButtonControl.onClick.RemoveListener(OnSyncClicked);
         }
 
         private void OnEnable()
@@ -150,6 +181,25 @@ namespace NanoverImd.UI
             controller.ClearActiveSelection();
         }
 
+        private void OnSyncClicked()
+        {
+            controller.SendSelections();
+        }
+
+        private void RefreshSyncState()
+        {
+            if (syncButton != null)
+                syncButton.Text = controller.IsSendingSelections
+                    ? "Sending..."
+                    : "Send selections";
+
+            if (syncButtonControl != null)
+                syncButtonControl.interactable = controller.CanSyncSelections;
+
+            if (syncStatusLabel != null)
+                syncStatusLabel.text = controller.SelectionSyncStatusText;
+        }
+
         private void OnSelectionItemClicked(ResidueSelection selection)
         {
             controller.SetActiveSelection(selection);
@@ -157,6 +207,7 @@ namespace NanoverImd.UI
 
         private void Refresh()
         {
+            RefreshSyncState();
             var workspace = controller.Workspace;
             var selection = controller.ActiveSelection;
             var hasWorkspace = workspace != null;
